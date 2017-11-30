@@ -1,8 +1,9 @@
-var keys = require("twitterKeys");
+var keys = require("./keys");
 var twitter = require("twitter");
 var spotify = require("node-spotify-api");
 var request = require("request");
 var fs = require("fs");
+
 
 switch (process.argv[2]) {
     case "my-tweets":
@@ -22,6 +23,7 @@ switch (process.argv[2]) {
     default:
         console.log("Please type a valid command.");
 }
+
 
 var myTweets = function() {
 //      * This will show your last 20 tweets and when they were created at in your terminal/bash window.
@@ -87,3 +89,11 @@ var doWhatItSays = function() {
 // * Feel free to change the text in that document to test out the feature for other commands.
 
 }
+
+// ### BONUS
+
+// * In addition to logging the data to your terminal/bash window, output the data to a .txt file called `log.txt`.
+
+// * Make sure you append each command you run to the `log.txt` file. 
+
+// * Do not overwrite your file each time you run a command.
