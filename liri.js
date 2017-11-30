@@ -6,19 +6,35 @@ var fs = require("fs");
 
 switch (process.argv[2]) {
     case "my-tweets":
-        //show last 20 tweets
+        myTweets();
         break;
     case "spotify-this-song":
         var songName = process.argv[3];
-        //show song information
+        spotifyThisSong(songName);
         break;
     case "movie-this":
         var movieName = process.argv[3];
-        //show movie information
+        movieThis(movieName);
         break;
     case "do-what-it-says":
         //use fs 
         break;
     default:
+        console.log("Please type a valid command.");
+}
+
+var myTweets = function() {
+
+}
+
+var spotifyThisSong = function(songName) {
+
+}
+
+var movieThis = function(movieName) {
+
+}
+
+var doWhatItSays = function() {
 
 }
