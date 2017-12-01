@@ -3,33 +3,72 @@ var twitter = require("twitter");
 var spotify = require("node-spotify-api");
 var request = require("request");
 var fs = require("fs");
+var inquirer = require("inquirer");
 
-
-switch (process.argv[2]) {
-    case "my-tweets":
-        myTweets();
-        break;
-    case "spotify-this-song":
-        var songName = process.argv[3];
-        spotifyThisSong(songName);
-        break;
-    case "movie-this":
-        var movieName = process.argv[3];
-        movieThis(movieName);
-        break;
-    case "do-what-it-says":
-        //use fs 
-        break;
-    default:
-        console.log("Please type a valid command.");
+var initLIRI = function() {
+    inquirer.prompt([
+        {
+            type: "list",
+            message: "Welcome to LIRI! Please choose a command: ",
+            choices: ["My Tweets", "Spotify This Song", "Movie This", "Do What It Says"],
+            name: "command"
+        }
+    ]).then(function(response) {
+        switch (response.command) {
+            case "My Tweets":
+                myTweets();
+                break;
+            case "Spotify This Song":
+                spotifyThisSong();
+                break;
+            case "Movie This":
+                movieThis();
+                break;
+            case "Do What It Says":
+                //use fs 
+                doWhatItSays();
+                break;
+            default:
+                console.log("default response");
+        }
+    });
 }
 
+var reset = function() {
+    inquirer.prompt([
+        {
+            type: "confirm",
+            message: "Select another command?",
+            default: "false",
+            name: "confirm"
+        }
+    ]).then(function(response) {
+        if (response.confirm) {
+            initLIRI();
+        } else {
+            console.log("Thank You!");
+        }
+    });
+}
 
 var myTweets = function() {
 //      * This will show your last 20 tweets and when they were created at in your terminal/bash window.
+    console.log("myTweets");
+    reset();
 }
 
-var spotifyThisSong = function(songName) {
+var spotifyThisSong = function() {
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "Type the name of your favorite song: ",
+            name: "songTitle"
+        }
+    ]).then(function(response) {
+        console.log("spotifyThisSong");
+        console.log(response.songTitle);
+        reset();        
+    });
 //    * This will show the following information about the song in your terminal/bash window
      
 //      * Artist(s)
@@ -56,7 +95,18 @@ var spotifyThisSong = function(songName) {
 
 }
 
-var movieThis = function(movieName) {
+var movieThis = function() {
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "Type the name of your favorite movie: ",
+            name: "movieTitle"
+        }
+    ]).then(function(response) {
+        console.log("movieThis");
+        console.log(response.movieTitle);
+        reset();        
+    });
 // * This will output the following information to your terminal/bash window:
 
 //      ```
@@ -77,7 +127,7 @@ var movieThis = function(movieName) {
 //      * It's on Netflix!
     
 //    * You'll use the request package to retrieve data from the OMDB API. Like all of the in-class activities, the OMDB API requires an API key. You may use `trilogy`.
-    
+
 }
 
 var doWhatItSays = function() {
@@ -87,7 +137,8 @@ var doWhatItSays = function() {
 // * It should run `spotify-this-song` for "I Want it That Way," as follows the text in `random.txt`.
 
 // * Feel free to change the text in that document to test out the feature for other commands.
-
+    console.log("doWhatItSays");
+    reset();
 }
 
 // ### BONUS
@@ -97,3 +148,5 @@ var doWhatItSays = function() {
 // * Make sure you append each command you run to the `log.txt` file. 
 
 // * Do not overwrite your file each time you run a command.
+
+initLIRI();
