@@ -1,6 +1,6 @@
 var keys = require("./keys");
 var twitter = require("twitter");
-var spotify = require("node-spotify-api");
+var Spotify = require("node-spotify-api");
 var request = require("request");
 var fs = require("fs");
 var inquirer = require("inquirer");
@@ -58,6 +58,8 @@ var myTweets = function() {
 }
 
 var spotifyThisSong = function() {
+    console.log("Welcome to Spotify This Song!");
+    
     inquirer.prompt([
         {
             type: "input",
@@ -65,9 +67,29 @@ var spotifyThisSong = function() {
             name: "songTitle"
         }
     ]).then(function(response) {
-        console.log("spotifyThisSong");
-        console.log(response.songTitle);
-        reset();        
+        console.log("Searching for: " + response.songTitle);
+
+        var spotify = new Spotify({
+            id: keys.client_id,
+            secret: keys.client_secret
+        });
+           
+        spotify.search(
+            { 
+                type: 'track', 
+                query: response.songTitle, 
+                limit: "1"
+            }
+        ).then(function(response) {
+            var artist = response.tracks.items[0].artists[0].name;
+            var name = response.tracks.items[0].name;
+            var previewURL = response.tracks.items[0].preview_url;
+            var album = response.tracks.items[0].album.name;
+            console.log("Artist: " + artist + "\nName: " + name + "\nPreview: " + previewURL + "\nAlbum: " + album);
+            reset();                    
+        }).catch(function(err) {
+            console.log(err);
+        });
     });
 //    * This will show the following information about the song in your terminal/bash window
      
