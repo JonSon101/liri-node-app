@@ -1,5 +1,6 @@
-var keys = require("./keys");
-var twitter = require("twitter");
+var twitterKeys = require("./twitterKeys");
+var spotifyKeys = require("./spotifyKeys");
+var Twitter = require("twitter");
 var Spotify = require("node-spotify-api");
 var request = require("request");
 var fs = require("fs");
@@ -52,9 +53,26 @@ var reset = function() {
 }
 
 var myTweets = function() {
-//      * This will show your last 20 tweets and when they were created at in your terminal/bash window.
-    console.log("myTweets");
-    reset();
+    console.log("Welcome to My Tweets");
+    
+    var client = new Twitter({
+        consumer_key: twitterKeys.consumer_key,
+        consumer_secret: twitterKeys.consumer_secret,
+        access_token_key: twitterKeys.access_token_key,
+        access_token_secret: twitterKeys.access_token_secret
+    });
+
+    var params = {screen_name: "jsmit826"};
+
+    client.get('statuses/user_timeline', params).then(function(tweet) {
+        console.log("Searching for " + params.screen_name + " most recents Tweets...");
+        for (var i = 0; i < tweet.length; i++) {
+            console.log(tweet[i].created_at + " - " + tweet[i].text);
+        }
+        reset();
+    }).catch(function(error) {
+        console.log(error);
+    });
 }
 
 var spotifyThisSong = function() {
@@ -69,10 +87,10 @@ var spotifyThisSong = function() {
     ]).then(function(response) {
         var songTitle = response.songTitle;
         console.log("Searching for: " + songTitle);
-
+        
         var spotify = new Spotify({
-            id: keys.client_id,
-            secret: keys.client_secret
+            id: spotifyKeys.client_id,
+            secret: spotifyKeys.client_secret
         });
            
         spotify.search(
