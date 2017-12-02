@@ -169,12 +169,4 @@ var doWhatItSays = function() {
     reset();
 }
 
-// ### BONUS
-
-// * In addition to logging the data to your terminal/bash window, output the data to a .txt file called `log.txt`.
-
-// * Make sure you append each command you run to the `log.txt` file. 
-
-// * Do not overwrite your file each time you run a command.
-
 initLIRI();
