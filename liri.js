@@ -127,31 +127,35 @@ var movieThis = function() {
             name: "movieTitle"
         }
     ]).then(function(response) {
-        console.log("movieThis");
-        console.log(response.movieTitle);
-        reset();        
+        console.log("Welcome to Movie This!");
+
+        if (response.movieTitle === "") {
+            console.log("Try typing in a movie title!\nHere is one of our favorites!\n");
+            console.log("\nTitle: Mr. Nobody" + "\nYear: 2009" + "\nIMDB Rating: 7.9/10" + "\nRotten Tomatoes: 66%" + 
+                "\nProduced in: USA" + "\nLanguage: English" + "\nPlot: A boy stands on a station platform as a train is about to leave. Should he go with his mother or stay with his father? Infinite possibilities arise from this decision. As long as he doesn't choose, anything is possible." + 
+                "\nActors: Jared Leto, Sarah Polley, Diane Kruger\n");   
+            reset();
+        } else {
+            request("http://www.omdbapi.com/?t=" + response.movieTitle + "&y=&plot=short&apikey=trilogy", function (error, response, movie) {
+            
+                if (!error && response.statusCode === 200) {
+                    //console.log(JSON.parse(movie).Ratings[0].Value);
+                    var title = JSON.parse(movie).Title;
+                    var year = JSON.parse(movie).Year;
+                    var ratingIMDB = JSON.parse(movie).Ratings[0].Value;
+                    var ratingRotTom = JSON.parse(movie).Ratings[1].Value;
+                    var country = JSON.parse(movie).Country;
+                    var language = JSON.parse(movie).Language;
+                    var plot = JSON.parse(movie).Plot;
+                    var actors = JSON.parse(movie).Actors;
+
+                    console.log("\nTitle: " + title + "\nYear: " + year + "\nIMDB Rating: " + ratingIMDB + "\nRotten Tomatoes: " + ratingRotTom + 
+                        "\nProduced in: " + country + "\nLanguage: " + language + "\nPlot: " + plot + "\nActors: " + actors + "\n");              
+                }
+                reset();                
+            });
+        }
     });
-// * This will output the following information to your terminal/bash window:
-
-//      ```
-//        * Title of the movie.
-//        * Year the movie came out.
-//        * IMDB Rating of the movie.
-//        * Rotten Tomatoes Rating of the movie.
-//        * Country where the movie was produced.
-//        * Language of the movie.
-//        * Plot of the movie.
-//        * Actors in the movie.
-//      ```
-
-//    * If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
-        
-//      * If you haven't watched "Mr. Nobody," then you should: <http://www.imdb.com/title/tt0485947/>
-        
-//      * It's on Netflix!
-    
-//    * You'll use the request package to retrieve data from the OMDB API. Like all of the in-class activities, the OMDB API requires an API key. You may use `trilogy`.
-
 }
 
 var doWhatItSays = function() {
